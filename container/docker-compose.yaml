@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  react-app-starter:
+    image: react-app-starter
+    container_name: react-app-starter
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - API_ENDPOINT=/restapis/31x0lnhbkt/test/_user_request_
+    volumes:
+      - /opt/web:/opt/web
+    ports:
+      - "3000:3000"
+  localstack:
+    container_name: localstack
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=lambda,dynamodb,apigateway,iam,logs
+      - DEBUG=false
+      - DATA_DIR=/tmp/localstack/data
+      - LAMBDA_EXECUTOR=docker-reuse
+      - LAMBDA_DOCKER_NETWORK=container_default
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "/tmp/localstack:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
